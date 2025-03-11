@@ -2,14 +2,8 @@
 
 module Idv
   class IdTypePolicy
-    include AbTestingConcern
-
-    def initialize(user:, session:, user_session:, request: nil, current_sp: nil)
-      @current_user = user
-      @session = session
-      @user_session = user_session
-      @request = request
-      @current_sp = current_sp
+    def initialize(idv_session:)
+      @idv_session = idv_session
     end
 
     def allow_passport?
@@ -19,11 +13,11 @@ module Idv
 
     private
 
-    attr_reader :current_user, :session, :user_session, :request, :current_sp
+    attr_reader :idv_session
 
     def lexis_nexis?
-      ab_test_bucket(:DOC_AUTH_VENDOR) == :lexis_nexis ||
-        ab_test_bucket(:DOC_AUTH_VENDOR) == :mock
+      vendor = idv_session&.bucketed_doc_auth_vendor&.to_sym
+      vendor == :lexis_nexis || vendor == :mock
     end
 
     def passport_option_available?

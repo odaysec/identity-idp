@@ -14,7 +14,7 @@ module Idv
       idv_session.proofing_started_at ||= Time.zone.now.iso8601
       idv_session.passport_allowed = IdentityConfig.store.doc_auth_passports_enabled
       analytics.idv_doc_auth_welcome_visited(**analytics_arguments)
-      create_document_capture_session(reset: false)
+      doc_auth_vendor # Ensure the becketed vendor is set in the session
 
       Funnel::DocAuth::RegisterStep.new(current_user.id, sp_session[:issuer])
         .call('welcome', :view, true)
@@ -42,6 +42,7 @@ module Idv
         undo_step: ->(idv_session:, user:) do
           idv_session.welcome_visited = nil
           idv_session.document_capture_session_uuid = nil
+          idv_session.bucketed_doc_auth_vendor = nil
         end,
       )
     end
@@ -73,7 +74,7 @@ module Idv
     end
 
     def id_type_policy
-      IdTypePolicy.new(user: current_user, session: session, user_session: user_session)
+      IdTypePolicy.new(idv_session: idv_session)
     end
   end
 end
