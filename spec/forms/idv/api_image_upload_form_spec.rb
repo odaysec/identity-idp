@@ -692,7 +692,7 @@ RSpec.describe Idv::ApiImageUploadForm do
 
         expect(fake_analytics).to have_logged_event(
           :idv_dos_passport_verification,
-          success: false, 
+          success: false,
           response: 'NO',
           submit_attempts: 1,
           remaining_submit_attempts: 3,
@@ -746,7 +746,7 @@ RSpec.describe Idv::ApiImageUploadForm do
 
         expect(fake_analytics).to have_logged_event(
           :idv_dos_passport_verification,
-          success: true, 
+          success: true,
           response: 'YES',
           submit_attempts: 1,
           remaining_submit_attempts: 3,

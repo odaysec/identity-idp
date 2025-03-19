@@ -2358,10 +2358,13 @@ module AnalyticsEvents
   end
 
   # User's passport information submitted to DoS for validation
-  # @param [String] step Current IdV step
-  # @param [String] analytics_id Current IdV flow identifier
-  # @param [Boolean] skip_hybrid_handoff Whether skipped hybrid handoff A/B test is active
-  # @param [Boolean] opted_in_to_in_person_proofing User opted into in person proofing
+  # @param [Boolean] success Whether the validation succeeded
+  # @param [String] response The raw verdict from DoS
+  # @param [Integer] submit_attempts Times that user has tried submitting document capture
+  # @param [Integer] remaining_submit_attempts  how many attempts the user has left before
+  #                  we rate limit them.
+  # @param [String] user_id
+  # @param [String] document_type The document type (should always be 'Passport' here)
   def idv_dos_passport_verification(
     success:,
     response:,
