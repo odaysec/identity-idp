@@ -9,6 +9,17 @@ RSpec.describe UserMailer, type: :mailer do
   let(:banned_email_address) { create(:email_address, email: banned_email, user: user) }
   let(:is_enhanced_ipp) { false }
 
+  let(:view_context) { ActionController::Base.new.view_context }
+  let(:sp) { build_stubbed(:service_provider, logo: 'gsa.png') }
+  let(:decorated_sp_session) do
+    ServiceProviderSessionCreator.new(
+      sp: sp,
+      view_context: view_context,
+      sp_session: { issuer: sp.issuer },
+      service_provider_request: ServiceProviderRequestProxy.new,
+    ).create_session
+  end
+
   describe '#validate_user_and_email_address' do
     let(:request_id) { '1234-abcd' }
     let(:mail) do
@@ -855,6 +866,7 @@ RSpec.describe UserMailer, type: :mailer do
         UserMailer.with(user: user, email_address: email_address).in_person_ready_to_verify(
           enrollment: enrollment,
           is_enhanced_ipp:,
+          decorated_sp_session:,
         )
       end
 
@@ -917,6 +929,7 @@ RSpec.describe UserMailer, type: :mailer do
             UserMailer.with(user: user, email_address: email_address).in_person_ready_to_verify(
               enrollment: enhanced_ipp_enrollment,
               is_enhanced_ipp: is_enhanced_ipp,
+              decorated_sp_session:,
             )
           end
           it 'renders the change location heading' do
@@ -941,6 +954,7 @@ RSpec.describe UserMailer, type: :mailer do
             UserMailer.with(user: user, email_address: email_address).in_person_ready_to_verify(
               enrollment: enhanced_ipp_enrollment,
               is_enhanced_ipp: is_enhanced_ipp,
+              decorated_sp_session:,
             )
           end
 
@@ -976,6 +990,24 @@ RSpec.describe UserMailer, type: :mailer do
                 end
               end
             end
+          end
+        end
+
+        context 'when the partner agency logo is a png' do
+          it 'displays the partner agency logo' do
+            # TKTK
+          end
+        end
+
+        context 'when the partner agency logo is a svg' do
+          it 'displays the partner agency name' do
+            # TKTK
+          end
+        end
+
+        context 'when there is no partner agency logo' do
+          it 'displays the partner agency name' do
+            # TKTK
           end
         end
 
@@ -1033,6 +1065,7 @@ RSpec.describe UserMailer, type: :mailer do
           UserMailer.with(user: user, email_address: email_address).in_person_ready_to_verify(
             enrollment: enhanced_ipp_enrollment,
             is_enhanced_ipp:,
+            decorated_sp_session:,
           )
         end
 

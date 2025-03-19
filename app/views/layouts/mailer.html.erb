@@ -49,6 +49,14 @@
                                           alt: t('mailer.logo', app_name: APP_NAME),
                                         ) %>
                                   </th>
+                                  <th> 
+                                    <% if @decorated_sp_session&.logo_is_png? %>
+                                      <th> <%= image_tag(@decorated_sp_session.sp_logo_url, size: '142x19', style: 'width: 142px; height: 19px;', alt: @decorated_sp_session.sp_name) %> </th> 
+                                    <% end %>
+                                    <% unless @decorated_sp_session&.logo_is_png? %>
+                                      <th> @decorated_sp_session.sp_name </th> 
+                                    <% end %>
+                                  </th>
                                   <th class="expander"></th>
                                 </tr>
                               </table>
