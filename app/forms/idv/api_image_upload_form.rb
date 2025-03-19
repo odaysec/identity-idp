@@ -166,6 +166,15 @@ module Idv
     def validate_mrz(client_response)
       response = DocAuth::Dos::Requests::MrzRequest.new(mrz: client_response.pii_from_doc.mrz).fetch
 
+      analytics.idv_dos_passport_verification(
+        document_type: extra_attributes[:document_type],
+        remaining_submit_attempts: extra_attributes[:remaining_submit_attempts],
+        submit_attempts: extra_attributes[:submit_attempts],
+        user_id: extra_attributes[:user_id],
+        response: response.extra[:response],
+        success: response.success?,
+      )
+
       if !response.success?
         errors.add(:passport, response.errors[:mrz], type: :invalid)
       end

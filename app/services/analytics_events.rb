@@ -2357,6 +2357,32 @@ module AnalyticsEvents
     )
   end
 
+  # User's passport information submitted to DoS for validation
+  # @param [String] step Current IdV step
+  # @param [String] analytics_id Current IdV flow identifier
+  # @param [Boolean] skip_hybrid_handoff Whether skipped hybrid handoff A/B test is active
+  # @param [Boolean] opted_in_to_in_person_proofing User opted into in person proofing
+  def idv_dos_passport_verification(
+    success:,
+    response:,
+    submit_attempts:,
+    remaining_submit_attempts:,
+    user_id:,
+    document_type:,
+    **extra
+  )
+    track_event(
+      :idv_dos_passport_verification,
+      success:,
+      response:,
+      submit_attempts:,
+      remaining_submit_attempts:,
+      user_id:,
+      document_type:,
+      **extra,
+    )
+  end
+
   # User submitted IDV password confirm page
   # @param [Boolean] success
   # @param [Boolean] fraud_review_pending
